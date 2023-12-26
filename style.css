@@ -1,0 +1,16 @@
+.bg-primary-darker {
+  background: rgba(16, 26, 44, 1) !important;
+}
+.bg-primary-lightDarker {
+  background: rgb(30 41 63) !important;
+}
+.text-blue {
+  color: #6889da;
+}
+.width {
+  width: fit-content !important;
+}
+
+.wp-100 {
+  max-width: 100px !important;
+}
