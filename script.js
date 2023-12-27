@@ -1,116 +1,74 @@
-let days = document.getElementById("days");
-let hours = document.getElementById("hours");
-let min = document.getElementById("minutes");
-let sec = document.getElementById("seconds");
+let daysId = document.getElementById("days");
+let hoursId = document.getElementById("hours");
+let minutesId = document.getElementById("minutes");
+let secondsId = document.getElementById("seconds");
 
-let daysInt = parseInt(days.innerHTML, 10);
-let hoursInt = parseInt(hours.innerHTML, 10);
-let minInt = parseInt(min.innerHTML, 10);
-let secInt = parseInt(sec.innerHTML, 10);
+const targetDate = new Date("2024-02-01T00:00:00Z").getTime();
+const currentDate = new Date().getTime();
+const timeRemaining = targetDate - currentDate;
 
-if (secInt < 10) {
-  sec.innerHTML = "0" + secInt;
-}
-if (minInt < 10) {
-  min.innerHTML = "0" + minInt;
-}
-if (hoursInt < 10) {
-  hours.innerHTML = "0" + hoursInt;
-}
-if (daysInt < 10) {
-  days.innerHTML = "0" + daysInt;
-}
+let days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+let hours = Math.floor(
+  (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+);
+let minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+let seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+displayNum(seconds, secondsId);
+displayNum(minutes, minutesId);
+displayNum(hours, hoursId);
+displayNum(days, daysId);
 
 const intervalId = setInterval(updateCountdown, 1000);
 
-function updateCountdown() {
-  if (daysInt === 0 && hoursInt === 0 && minInt === 0 && secInt === 0) {
-    clearInterval(intervalId);
+function displayNum(numberValue, htmlText) {
+  if (numberValue < 10) {
+    htmlText.innerHTML = "0" + numberValue;
   } else {
-    if (secInt > 0) {
-      secInt--;
-      if (secInt < 10) {
-        sec.innerHTML = "0" + secInt;
-      } else {
-        sec.innerHTML = secInt;
-      }
-    } else {
-      secInt = 59;
-      sec.innerHTML = secInt;
-      if (minInt > 0) {
-        minInt--;
-        if (minInt < 10) {
-          min.innerHTML = "0" + minInt;
-        } else {
-          min.innerHTML = minInt;
-        }
-      } else {
-        minInt = 59;
-        min.innerHTML = minInt;
-
-        if (hoursInt > 0) {
-          hoursInt--;
-          if (daysInt < 10) {
-            days.innerHTML = "0" + daysInt;
-          } else {
-            hours.innerHTML = hoursInt;
-          }
-        } else {
-          hoursInt = 23;
-          hours.innerHTML = hoursInt;
-
-          if (daysInt > 0) {
-            daysInt--;
-            if (daysInt < 10) {
-              days.innerHTML = "0" + daysInt;
-            } else {
-              days.innerHTML = daysInt;
-            }
-          }
-        }
-      }
-    }
+    htmlText.innerHTML = numberValue;
+  }
+}
+function endTime() {
+  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+    clearInterval(intervalId);
   }
 }
 
-// let days = document.getElementById("days");
-// let hours = document.getElementById("hours");
-// let min = document.getElementById("minutes");
-// let sec = document.getElementById("seconds");
+function updateCountdown() {
+  updateSec();
 
-// let intervalId = setInterval(updateCountdown, 1000);
+  displayNum(seconds, secondsId);
+  displayNum(minutes, minutesId);
+  displayNum(hours, hoursId);
+  displayNum(days, daysId);
 
-// function updateCountdown() {
-//   let daysInt = parseInt(days.innerHTML, 10);
-//   let hoursInt = parseInt(hours.innerHTML, 10);
-//   let minInt = parseInt(min.innerHTML, 10);
-//   let secInt = parseInt(sec.innerHTML, 10);
+  endTime();
+}
 
-//   if (daysInt === 0 && hoursInt === 0 && minInt === 0 && secInt === 0) {
-//     clearInterval(intervalId);
-//   } else {
-//     if (secInt > 0) {
-//       sec.innerHTML = secInt;
-//       secInt--;
-//     } else {
-//       sec.innerHTML = secInt = 59;
-//       if (minInt > 0) {
-//         minInt--;
-//         min.innerHTML = minInt;
-//       } else {
-//         min.innerHTML = minInt = 59;
-//         if (hoursInt > 0) {
-//           hoursInt--;
-//           hours.innerHTML = hoursInt;
-//         } else {
-//           hours.innerHTML = hoursInt = 23;
-//           if (daysInt > 0) {
-//             daysInt--;
-//             days.innerHTML = daysInt;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-// If you want to reset the interval when 'else' block is executed
+function updateSec() {
+  if (seconds > 0) {
+    seconds--;
+  } else {
+    seconds = 59;
+    updateMin();
+  }
+}
+function updateMin() {
+  if (minutes > 0) {
+    minutes--;
+  } else {
+    minutes = 59;
+    updateHour();
+  }
+}
+function updateHour() {
+  if (hours > 0) {
+    hours--;
+  } else {
+    hours = 23;
+    updateDay();
+  }
+}
+function updateDay() {
+  days--;
+}
